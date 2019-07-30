@@ -20,7 +20,7 @@ Scripts
 
 Here is a brief description of scripts used for NNeval:
 
-1)test_feature_extraction_nneval.py  (py27) this is the code for extracting scores of various metrics which are used as features
+1)test_feature_extraction.py  (py27) this is the code for extracting scores of various metrics which are used as features
 
 =======================================================================
 
@@ -32,15 +32,15 @@ For WMD: https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word
 
 =======================================================================
 
-2)nn_classify_test_nneval.py (py35) is the test bed for the test set
+2)nn_classify_test_lceval.py (py35) is the test bed for the test set
 
 =======================================================================
 
-3)nn_classify_model_nneval (py35) creates the nneval model
+3)nn_classify_model(py35) creates the nneval model
 
 =======================================================================
 
-4)nn_classify_utils_nneval (py35) contains some utility functions
+4)nn_classify_utils (py35) contains some utility functions
 
 =======================================================================
 
@@ -53,7 +53,7 @@ Please follow the following order of running the scripts:
 
 1) test_feature_extraction.py (make sure the spice and meteor scores are extracted before hand or modify the code to extract within the script)
 
-2) nn_classify_test_nneval.py- generates the scores for captions, given the feature file. 
+2) nn_classify_test.py- generates the scores for captions, given the feature file. 
 
 
 Reference
