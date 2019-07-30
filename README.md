@@ -1,4 +1,3 @@
-# LCEVal
 LCEVal: Learned Composite Metric for Caption Evaluation
 ================================================================
 
@@ -36,7 +35,7 @@ For WMD: https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word
 
 =======================================================================
 
-3)nn_classify_model(py35) creates the nneval model
+3)nn_classify_model(py35) creates the lceval model
 
 =======================================================================
 
