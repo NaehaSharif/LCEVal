@@ -6,15 +6,11 @@ utils for nn_classify
 """
 
 import json
-#from sklearn import preprocessing
 import numpy as np
 import os
 import numpy as np
 import h5py
 from collections import Counter
-#from sklearn.datasets import make_classification
-#from imblearn.over_sampling import RandomOverSampler
-#from imblearn.under_sampling import RandomUnderSampler
 import random
 import time
 import scipy
@@ -22,26 +18,7 @@ from datetime import datetime
 
 
 
-#def min_max_norm(feats,Ids):
-#    
-#    features=[] 
-#    
-#    for i in Ids:
-#       features.append(feats[i])
-#       
-#    X_train=np.array(features)
-#    X_train=X_train.astype(np.float)
-#    min_max_scaler = preprocessing.MinMaxScaler(feature_range=(-1, 1))
-#    X_train_minmax = min_max_scaler.fit_transform(X_train)
-#    
-#    for i,ids in enumerate(Ids):
-#       feats[ids]=X_train_minmax[i]
-#       
-#    return feats
-
-
-
-def load_nnclassify_data(base_dir='D:/NNeval_classification/data'):
+def load_nnclassify_data(base_dir='D:/LCEval_classification/data'):
     
   data = {}
   start_t = time.time()
@@ -65,11 +42,7 @@ def load_nnclassify_data(base_dir='D:/NNeval_classification/data'):
   trainIds=train_feats.keys()
   valIds=val_feats.keys()
  
-   
-#  train_featur=min_max_norm(train_feats,trainIds) #   min-max normalising training features
-#  val_featur=min_max_norm(val_feats,valIds) #   min-max normalising validation features
-#  
-
+  
   
   with open(train_labels_file) as f:  # loading training labels
     train_lb=json.load(f)       
@@ -178,31 +151,8 @@ def load_test_data(test):
   return data,ids
 
 
-#def sample_test_minibatch(data, batch_size=10, split='train',k):
-#  
-##  split_size = data['%s_features' % split].shape[0]
-##      #mask = np.random.choice(split_size, batch_size)
-##  mask = np.random.choice(split_size, batch_size)
-##  mask = random.sample(range(split_size), batch_size)
-#  labels = data['%s_labels' % split][k:k+batch_size]
-#  #image_idxs = data['%s_imageid' % split][mask]
-#  sentence_features = data['%s_features' % split][k:k+batch_size]
-#  
-#
-#  return sentence_features, labels
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 def correlation_for_validation(scores,judgement):
-#    # getting correlation with flicker 8k scores 
-#    data_dir=judgement_path
-    
-#    # val_scores.json       {0: 1, 1:5}
-#    with open(data_dir) as f:
-#         judgements=json.load(f)
-#        
-#    j_all=[]
-#   
-#    for i in Ids: 
-#        j_all.append(judgements[i])
         
     j_all=judgement
     scores=np.array(scores)
@@ -233,11 +183,7 @@ def process_scores(sc,BATCH_SIZE_INFERENCE):
     return score_list
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 def shuffle_data(data,shuffle):
-    
-#    sh_data={}
-#    n = len(data['train_features'])
-#    shuffle=random.sample(range(0, n), n)
-    
+
     data['train_features']=data['train_features'][shuffle]
     data['val_features']=data['val_features']
        
