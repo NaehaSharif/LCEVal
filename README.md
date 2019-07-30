@@ -2,7 +2,7 @@
 LCEVal: Learned Composite Metric for Caption Evaluation
 ================================================================
 
-NNEval is a learning-based metric to evaluate image captions. Our proposed framework incorporates various linguistic features into a single learned metric. 
+LCEval is a learning-based metric to evaluate image captions. Our proposed framework incorporates various linguistic features into a single learned metric. 
 
 Dependencies
 ==========
@@ -10,7 +10,7 @@ These scripts were written in Python, and following is needed to run these scrip
 
 -Python 2.7 (for the tokenizer and some of the features)
 
--Python 3.5 (for NNEval model and metric)
+-Python 3.5 (for LCEval model and metric)
 
 -TensorFlow 1.5.0 (GPU)
 
@@ -18,7 +18,7 @@ These scripts were written in Python, and following is needed to run these scrip
 Scripts
 ========
 
-Here is a brief description of scripts used for NNeval:
+Here is a brief description of scripts used for LCeval:
 
 1)test_feature_extraction.py  (py27) this is the code for extracting scores of various metrics which are used as features
 
@@ -32,7 +32,7 @@ For WMD: https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word
 
 =======================================================================
 
-2)nn_classify_test_lceval.py (py35) is the test bed for the test set
+2)nn_classify_test.py (py35) is the test bed for the test set
 
 =======================================================================
 
