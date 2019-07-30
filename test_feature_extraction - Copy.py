@@ -6,21 +6,7 @@ feature extraction for test set
 @author: 22161668
 # this is the code for extracting scores of various metrics
 
-0-3) n-gram precision , n= 1,2,3,4
-4-7) n-gram recal,      n= 1,2,3,4
-8-11) n-gram f-measure, n=1,2,3,4
-12) brevity penalty
-13) Rogue-L score
-14) Meteor score
-15) WMD score
-16-19) Blue 1,2,3,4 scores
-20) SPICE score
-21) Cider score
-22) MOWE Sentence semantic similarity
-23) MOWE FAST Sentence semantic similarity
-24-27) DPscores
-28-43) HWCM scores
-44) MOWE glove
+
 --variable info----
 
 blscore        (overall blue score)           [Blue1, Blue2, Blue3, Blue4]         4
@@ -44,12 +30,9 @@ HWCM DEPscores(hwcm scores)                   [[1chain],[2chain],[3chain],[4chai
 HWCM POSscores(hwcm scores)                   [[1chain],[2chain],[3chain],[4chain]]4 x no of hyp
 MOWE_glovescore(semantic similarity scores)   [scores]                             1 x no of hyp
 
-saves the follwoing files:
-Then goes the mean for all and then min for all concerned
+
 --------------------------------------------------------------  
   
-f8k_features.json
-compcoco_features.json
 
 @author: 22161668 naeha sharif
 """
@@ -81,12 +64,10 @@ import syntactic
 
 
 data_path='D:/NNeval_classification/data'
-#glove_embedding= 'D:/NNeval_classification/wmd/GoogleNews-vectors-negative300.bin'
 stop_words = stopwords.words('english')
 stat_path = os.path.join(data_path, "train/train_stats.json")
 nlp = spacy.load('en_core_web_sm')
 DP=syntactic.syntacticDP()
-
 
 embeddings =gensim.models.KeyedVectors.load_word2vec_format( "GoogleNews-vectors-negative300.bin" , binary=True ) 
 print( 'word to vec loaded') 
@@ -106,8 +87,6 @@ def _parse_sentence(s): # this function parses a given string
     return s
 
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-#''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 def dot_product2(v1, v2):
     return sum(map(operator.mul, v1, v2))
 
@@ -120,42 +99,18 @@ def vector_cos(v1, v2):
 
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-
-
-#option=['f8k','compcoco','test_pascal1','test_pascal2']
-option=['test_pascal1','test_pascal2']
-sp='28test_pascal'
-#option=['test_pascal']  #run for test pascal feature 1 and feature 2
+option=['test_pascal1']
 
 check_flag=0 # flag to load wmd only once
  
 for split in option:
     
-    if split=='test_pascal1':
-        split='test_pascal'
         
-        reference_path = os.path.join(data_path, "%s/%s_references.json" %(sp,split))
-        candidate_path = os.path.join(data_path, "%s/%s_captions1.json" %(sp,split))
-        spice_score_path = os.path.join(data_path, "%s/%s_spice_sc1.json" %(sp,split))  
-        meteor_score_path = os.path.join(data_path, "%s/%s_meteor_sc1.json" %(sp,split))
-        feature_path=os.path.join(data_path, "%s/%s_features1.json" %(sp,split))  
-   
-    elif split=='test_pascal2':
-        split='test_pascal'
-        
-        reference_path = os.path.join(data_path, "%s/%s_references.json" %(sp,split))
-        candidate_path = os.path.join(data_path, "%s/%s_captions2.json" %(sp,split))
-        spice_score_path = os.path.join(data_path, "%s/%s_spice_sc2.json" %(sp,split))  
-        meteor_score_path = os.path.join(data_path, "%s/%s_meteor_sc2.json" %(sp,split))
-        feature_path=os.path.join(data_path, "%s/%s_features2.json" %(sp,split)) 
-    
-    else:
-     
-        reference_path = os.path.join(data_path, "test/test_references_%s.json" %(split))
-        candidate_path = os.path.join(data_path, "test/test_captions_%s.json" %(split))
-        meteor_score_path = os.path.join(data_path, "test/%s_meteor_sc.json" %(split))
-        spice_score_path = os.path.join(data_path, "test/%s_spice_sc.json" %(split))
-        feature_path=os.path.join(data_path, "test/%s_features.json" %(split)) 
+        reference_path = os.path.join(data_path, "%s/_references.json" %(split))
+        candidate_path = os.path.join(data_path, "%s/_captions1.json" %(split))
+        spice_score_path = os.path.join(data_path, "%s/_spice_sc1.json" %(split))  
+        meteor_score_path = os.path.join(data_path, "%s/_meteor_sc1.json" %(split))
+        feature_path=os.path.join(data_path, "%s/_features1.json" %(split))  
             
     stat={}
         
@@ -189,8 +144,7 @@ for split in option:
     counter = collections.Counter(list_of_all_words)
     print('---Total words in vocabulary: ', len(counter), '---') 
     
-    vocab = counter.most_common(len(counter)) #Return a list of the n most common elements and their counts from the most common to the least.
-    ## create word_to_idx, and idx_to_word
+    vocab = counter.most_common(len(counter))
     vocab = [i[0] for i in vocab] # creating a list of vacabulary
 
     #===========================================================================   
@@ -802,12 +756,6 @@ for split in option:
 #    
     print( '-- All {} features extracted--\n time:  {}'.format(split, datetime.now()-time_now))    
 ##########################################################################   
-   
-        
-#    with open (stat_path) as f:
-#            stat= json.load(f)
-#            mean=stat['mean']
-#            std= stat['std']
 
 
     features={}
@@ -819,139 +767,17 @@ for split in option:
                          ngprecision[2][i],
                          ngprecision[3][i],
                          rg_nrecall[0][i],
-                         rg_nrecall[1][i],
-                         rg_nrecall[2][i],
-                         rg_nrecall[3][i],
-                         rg_fmeaure[0][i],
-                         rg_fmeaure[1][i],
-                         rg_fmeaure[2][i],
-                         rg_fmeaure[3][i],
-                         lgratio[i],
                          Rogue_Lscores[i],
                          meteor_scores[i],
                          wmd_score[i],
-                         blscores[0][i],
-                         blscores[1][i],
-                         blscores[2][i],
-                         blscores[3][i],
                          spice_scores[i],
                          cider_scores[i],
-                         MOWE_scores[i],
                          MOWE_fastscores[i],
-                         DP_all_score[0][i],
-                         DP_all_score[1][i],
-                         DP_all_score[2][i],
-                         DP_all_score[3][i],
-                         HWCM_text_score[0][i],
-                         HWCM_text_score[1][i],
-                         HWCM_text_score[2][i],
-                         HWCM_text_score[3][i],
-                         HWCM_lemma_score[0][i],
                          HWCM_lemma_score[1][i],
                          HWCM_lemma_score[2][i],
                          HWCM_lemma_score[3][i],
-                         HWCM_dep_score[0][i],
                          HWCM_dep_score[1][i],
-                         HWCM_dep_score[2][i],
-                         HWCM_dep_score[3][i],
-                         HWCM_pos_score[0][i],
-                         HWCM_pos_score[1][i],
-                         HWCM_pos_score[2][i],
-                         HWCM_pos_score[3][i],
-                         MOWE_glovescores[i],
-  #-------------------------mean----------------------------                       
-                         rg_nprecision_mean[0][i],
-                         rg_nprecision_mean[1][i],
-                         rg_nprecision_mean[2][i],
-                         rg_nprecision_mean[3][i],
-                         rg_nrecall_mean[0][i],
-                         rg_nrecall_mean[1][i],
-                         rg_nrecall_mean[2][i],
-                         rg_nrecall_mean[3][i],
-                         rg_fmeaure_mean[0][i],
-                         rg_fmeaure_mean[1][i],
-                         rg_fmeaure_mean[2][i],
-                         rg_fmeaure_mean[3][i],
-                         lgratio[i],
-                         Rogue_Lscores[i],
-                         meteor_scores[i],
-                         wmd_score_mean[i],
-                         blscores[0][i],
-                         blscores[1][i],
-                         blscores[2][i],
-                         blscores[3][i],
-                         spice_scores[i],
-                         cider_scores[i],
-                         MOWE_scores_mean[i],
-                         MOWE_fastscores_mean[i],
-                         DP_all_score_mean[0][i],
-                         DP_all_score_mean[1][i],
-                         DP_all_score_mean[2][i],
-                         DP_all_score_mean[3][i],
-                         HWCM_text_score_mean[0][i],
-                         HWCM_text_score_mean[1][i],
-                         HWCM_text_score_mean[2][i],
-                         HWCM_text_score_mean[3][i],
-                         HWCM_lemma_score_mean[0][i],
-                         HWCM_lemma_score_mean[1][i],
-                         HWCM_lemma_score_mean[2][i],
-                         HWCM_lemma_score_mean[3][i],
-                         HWCM_dep_score_mean[0][i],
-                         HWCM_dep_score_mean[1][i],
-                         HWCM_dep_score_mean[2][i],
-                         HWCM_dep_score_mean[3][i],
-                         HWCM_pos_score_mean[0][i],
-                         HWCM_pos_score_mean[1][i],
-                         HWCM_pos_score_mean[2][i],
-                         HWCM_pos_score_mean[3][i],
-                         MOWE_glovescores_mean[i],
-        
-#------------------------------min-------------------------------------------------
-                         rg_nprecision_min[0][i],
-                         rg_nprecision_min[1][i],
-                         rg_nprecision_min[2][i],
-                         rg_nprecision_min[3][i],
-                         rg_nrecall_min[0][i],
-                         rg_nrecall_min[1][i],
-                         rg_nrecall_min[2][i],
-                         rg_nrecall_min[3][i],
-                         rg_fmeaure_min[0][i],
-                         rg_fmeaure_min[1][i],
-                         rg_fmeaure_min[2][i],
-                         rg_fmeaure_min[3][i],
-                         lgratio[i],
-                         Rogue_Lscores[i],
-                         meteor_scores[i],
-                         wmd_score_min[i],
-                         blscores[0][i],
-                         blscores[1][i],
-                         blscores[2][i],
-                         blscores[3][i],
-                         spice_scores[i],
-                         cider_scores[i],
-                         MOWE_scores_min[i],
-                         MOWE_fastscores_min[i],
-                         DP_all_score_min[0][i],
-                         DP_all_score_min[1][i],
-                         DP_all_score_min[2][i],
-                         DP_all_score_min[3][i],
-                         HWCM_text_score_min[0][i],
-                         HWCM_text_score_min[1][i],
-                         HWCM_text_score_min[2][i],
-                         HWCM_text_score_min[3][i],
-                         HWCM_lemma_score_min[0][i],
-                         HWCM_lemma_score_min[1][i],
-                         HWCM_lemma_score_min[2][i],
-                         HWCM_lemma_score_min[3][i],
-                         HWCM_dep_score_min[0][i],
-                         HWCM_dep_score_min[1][i],
-                         HWCM_dep_score_min[2][i],
-                         HWCM_dep_score_min[3][i],
-                         HWCM_pos_score_min[0][i],
-                         HWCM_pos_score_min[1][i],
-                         HWCM_pos_score_min[2][i],
-                         HWCM_pos_score_min[3][i],
-                         MOWE_glovescores_min[i]]
+                         HWCM_dep_score[2][i]]
 #        
             
             
