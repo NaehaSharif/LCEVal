@@ -15,8 +15,7 @@ Created on Sun Feb  4 12:24:35 2018
 
 import numpy as np
 import tensorflow as tf
-#import tflearn as tl
-import configuration # class that controls hyperparameters
+import configuration
 
 
 model_config = configuration.ModelConfig()
@@ -30,8 +29,7 @@ def hidden_layers(nneval_out, config, initializer) :
     
 
     
-    initial_fc1 = tf.Variable(((2/config.nneval_insize)**0.5)*tf.random_normal([config.nneval_insize, config.layer1out_size],seed=123))
-#    initial_fc2 = tf.Variable(((2/config.layer1out_size)**0.5)*tf.random_normal([config.layer1out_size, config.layer2out_size],seed=123))  
+    initial_fc1 = tf.Variable(((2/config.nneval_insize)**0.5)*tf.random_normal([config.nneval_insize, config.layer1out_size],seed=123))  
 
     with tf.variable_scope("layer1"):
         
@@ -42,16 +40,6 @@ def hidden_layers(nneval_out, config, initializer) :
 
         Layer1_out=tf.nn.relu(Layer_1out)
         
-#    with tf.variable_scope("layer2"):
-#
-#        
-#        W2 = tf.get_variable('W2', initializer=initial_fc2.initialized_value())
-#        b2 = tf.get_variable('b2', [config.layer2out_size], initializer=tf.constant_initializer(0.0))
-#        Layer_2out = tf.matmul(Layer1_out, W2) + b2 # logits: [batch_size * padded_length, config.vocab_size]
-#        
-#
-#        Layer2_out = tf.nn.relu(Layer_2out)
-
         
     return Layer1_out,W1,b1
 
@@ -83,7 +71,7 @@ def build_model(config):
     initializer = tf.random_uniform_initializer(minval=-config.initializer_scale,
                                                 maxval=config.initializer_scale)
     
-    #xavier_initializer=tl.initializations.xavier (uniform=True, seed=None, dtype=tf.float32)
+ 
 
      # -----placheolders for the model--------------------------------------------
 
@@ -126,11 +114,6 @@ def build_model(config):
         #   self.total_loss (training and eval only)
        
     ############################################
-   
-#    with tf.variable_scope("hiddenlayer") as h_layer_scope:
-#        
-#        out_hidden_p,w1,b1=hidden_layers(sentence_features, config, initializer) # scores for the positive image-sentence pairs
-#        
 
     
     with tf.variable_scope("out_layer") as o_pre_layer_scope:
@@ -142,21 +125,15 @@ def build_model(config):
     
     #---------------- regularization terms ----------------------------------------------------
     
-    #reg1=tf.nn.l2_loss(w1)
-    #reg2=tf.nn.l2_loss(w2)
     reg3=tf.nn.l2_loss(wout_fine)
     
-
    #----------------------------------------------------------------------------------------
     nn_score=tf.nn.softmax(out_fine)
     
     """ For cross entropy loss"""
     layer_out=tf.reshape(out_fine,[-1,config.classes])
-#    true_out=tf.reshape(target,[-1,config.classes])
     batchloss_fine =tf.nn.softmax_cross_entropy_with_logits(logits=layer_out, labels=target) 
-#    loss = tf.reshape(loss, [-1])      # [ BATCHSIZE]
-   
-    #losses=tf.losses.mean_squared_error(labels=targets, predictions=final_nneval_out)
+
     #--------------------------------------------------------------------------------------------------
     
     # --------------define loss function-------------------------------------------------------------
@@ -177,8 +154,6 @@ def build_model(config):
     ### pre-train----------------------
     fine_loss_hist_summary=tf.summary.histogram("fine_histogram_loss", total_loss_fine)
     fine_accuarcy_hist_summary=tf.summary.histogram("fine_histogram_acc", accuracy_fine)
- #   weight1=tf.summary.histogram("weight_w1", w1)
-    #weight2=tf.summary.histogram("weight_w2", w2)
     weight3=tf.summary.histogram("weight_wout_fine", wout_fine)
 
     fine_loss_scalar_sumary=tf.summary.scalar("fine_scalar_loss", total_loss_fine)
