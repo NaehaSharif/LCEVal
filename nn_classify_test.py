@@ -23,14 +23,12 @@ testing nneval_classify and correlation evaluation
 
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import pandas as pd
 import scipy.stats
 import math
 
-import configuration # class that controls hyperparameters
-from nn_classify_model import* # makes the main graph # its the backbone 
+import configuration # 
+from nn_classify_model import* 
 from nn_classify_utils import load_test_data
 
 model_config = configuration.ModelConfig()
@@ -108,7 +106,7 @@ with g.as_default():
                
                 sc = _step_test(sess,model,features) 
                 
-#            print("processing_successful")
+
             scores=process_scores(sc, BATCH_SIZE_INFERENCE)
 
             
