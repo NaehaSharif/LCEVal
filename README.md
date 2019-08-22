@@ -60,11 +60,11 @@ Reference
 
 Please acknowledge the following authors, if you use this code as a part of any published research:
 
-NNEval: Neural Network based Evaluation Metric for Image Captioning
-@inproceedings{sharif2018nneval,
-  title={NNEval: Neural Network based Evaluation Metric for Image Captioning},
-  author={Sharif, Naeha and White, Lyndon and Bennamoun, Mohammed and Afaq Ali Shah, Syed},
-  booktitle={Proceedings of the European Conference on Computer Vision (ECCV)},
-  pages={37--53},
-  year={2018}
+@article{sharif2019lceval,
+  title={LCEval: Learned Composite Metric for Caption Evaluation},
+  author={Sharif, Naeha and White, Lyndon and Bennamoun, Mohammed and Liu, Wei and Shah, Syed Afaq Ali},
+  journal={International Journal of Computer Vision},
+  pages={1--25},
+  year={2019},
+  publisher={Springer}
 }
