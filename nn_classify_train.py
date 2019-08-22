@@ -8,11 +8,10 @@ Created on Sun Feb  4 12:22:44 2018
 
 import tensorflow as tf
 
-from datetime import datetime #for a combination of a date and a time
+from datetime import datetime 
 import numpy as np
 import os
 import sys # 
-import argparse # for command line parsing
 import time
 import math
 import json
@@ -24,7 +23,7 @@ import math
 
 
 import configuration # class that controls hyperparameters
-from nn_classify_model import build_model, nn_out_layers, hidden_layers # makes the main graph # its the backbone 
+from nn_classify_model import build_model, nn_out_layers, hidden_layers 
 from nn_classify_utils import load_nnclassify_data, sample_minibatch,process_scores,correlation_for_validation, shuffle_data
 
 model_config = configuration.ModelConfig()
@@ -45,12 +44,10 @@ def _step_test(sess, model, features):
     
     return nn_score   
 
-def _validation(sess, data, model): # returns validation loss (finetuning)
+def _validation(sess, data, model): 
     """
     Make a single gradient update for batch data. 
     """
-    # Make a minibatch of training data
-#    minibatch = sample_minibatch(data, batch_size=model_config.val_batch_size, split='val')
 
     features= data['val_features']
     true_out= data['val_labels']
@@ -96,7 +93,6 @@ def main(_):
 
     tf.reset_default_graph() # create a new graph and start fresh
     
-    # Build the TensorFlow graph and train it
     g = tf.Graph()
     
     with g.as_default(): # Returns a context manager that makes this Graph the default graph.
@@ -112,7 +108,6 @@ def main(_):
                                                    optimizer=training_config.optimizer)
 ####++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        # initialize all variables 
         init = tf.global_variables_initializer()
         local= tf.local_variables_initializer()
         timestamp = str(math.trunc(time.time()))
@@ -123,7 +118,6 @@ def main(_):
         sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True))
 
         with tf.device('/gpu:1'): 
-            #with tf.Session() as sess:
             sess.run(local)
             sess.run(init)
             
@@ -238,7 +232,6 @@ def main(_):
                         
 
 
-                # save the model continuously to avoid interruption 
                 if FLAGS.saveModel_every > 0 and (t+1) % FLAGS.saveModel_every == 0:
                     if not os.path.exists(FLAGS.savedSession_dir):
                         os.makedirs(FLAGS.savedSession_dir)
@@ -252,70 +245,14 @@ def main(_):
                             best_acc_iteration,float(best_acc), float(best_acc_loss), (datetime.now() - time_now).seconds/60.0))
             
             
-#            with open('data/val/val_correlation.json','w') as f:
-#                json.dump(val_correlation,f)
-#            valv={}    
-#            val_vs_acc={}
-#            val_vs_acc['pearson_correlation']=[i[0] for i in val_correlation_history]
-#            val_vs_acc['accuracy']=np.array(val_acc_history)
-#            val_vs_acc['checks']=np.array(checkpoint_history)
-#            valv['save']=[val_vs_acc['accuracy']]
-#            with open('data/val/val_corr_vs_acc.json','w') as f:
-#               json.dump(valv,f)
-            
-                
-#            pr=[]
-#            spr=[]
-#            knd=[]
-#            keys=sorted(val_correlation.keys())  
-#            
-#            for i in keys:
-#                
-#                pr.append(val_correlation[i][0])
-#                spr.append(val_correlation[i][1])
-#                knd.append(val_correlation[i][2])
-#                
-#                
-#            plt.plot(keys, pr, 'r--', 
-#                     keys, spr,'bs', keys, knd, 'g^')
-#            
-#            plt.xlabel('checkpoints')
-#            plt.ylabel('correlation')
-#            plt.show()   
-#            
-#            
-#            best_p_value=max(pr)    
-#            print( 'best pearson value: {}'.format(best_p_value))
-#            best_pearson=np.argmax(pr)
-#        
-#            best_model_pearson=keys[best_pearson]
-#            print('best model checkpoint for pearson: {}'.format(best_model_pearson))
-#        #-------------------------------------------------------------
-#        
-#            best_s_value=max(spr)    
-#            print( 'best spearman value: {}'.format(best_s_value))
-#            best_spearman=np.argmax(spr)
-#        
-#            best_model_spearman=keys[best_spearman]
-#            print('best model checkpoint for spearman : {}'.format(best_model_spearman))
-#        #--------------------------------------------------------------
-#        
-#            best_kendal_value=max(knd)    
-#            print( 'best kendal-tau value: {}'.format(best_kendal_value))
-#            best_kendal=np.argmax(knd)
-#        
-#            best_model_kendal=keys[best_kendal]
-#            print('best model checkpoint for kendal-tau : {}'.format(best_model_kendal))
-#        
-            
+
         sess.close()
 
 
 #------------this code takes command line arguments to set the FlAGS---------------------------------------------            
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  # classify_image_graph_def.pb:
-  #   Binary representation of the GraphDef protocol buffer.
+
   parser.add_argument(
       '--savedSession_dir',
       type=str,
@@ -340,14 +277,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '--sample_every',
       type=int,
-      #default=2040,
       default=math.ceil(training_config.total_examples/model_config.train_batch_size),
       help='Num of steps to generate validation resullts for training.  0 for not validating.'
   )
   parser.add_argument(
       '--saveModel_every',
       type=int,
-      #default=2040,
       default=math.ceil((training_config.total_examples/model_config.train_batch_size)/training_config.models_to_save_per_epoch), # one epoch has 3058 iterations  , for batch 30 and examples 91744
       help='Num of steps to save model checkpoint for trainig. 0 for not doing so.'
   )
