@@ -108,12 +108,8 @@ def load_nnclassify_data(base_dir='D:/LCEval_classification/data'):
 
 def sample_minibatch(data, batch_size, split,k):
   
-#  split_size = data['%s_features' % split].shape[0]
-#      #mask = np.random.choice(split_size, batch_size)
-#  mask = np.random.choice(split_size, batch_size)
-#  mask = random.sample(range(split_size), batch_size)
+
   labels = data['%s_labels' % split][k:k+batch_size]
-  #image_idxs = data['%s_imageid' % split][mask]
   sentence_features = data['%s_features' % split][k:k+batch_size]
   
 
