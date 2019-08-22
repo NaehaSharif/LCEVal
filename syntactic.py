@@ -79,9 +79,6 @@ class syntacticDP(object):
             self.hwcm4(child)   
                                  
 
-    #print_tree(get_trees(doc)[0])
-    #print_tree(get_trees(doc, lambda tok: tok.pos_)[0])
-    #print_tree(get_trees(doc, lambda tok: (tok, tok.dep_, tok.pos_))[0])
     
     def get_leaves(self, node):
         
